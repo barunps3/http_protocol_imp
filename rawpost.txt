@@ -1,0 +1,18 @@
+Accepted connection from [::1]:51162
+read: POST /coread: ffee HTTread: P/1.1
+Hread: ost: locread: alhost:4read: 2069
+UsPOST /coffee HTTP/1.1
+Host: localhost:42069
+read: er-Agentread: : curl/8read: .12.1
+Aread: ccept: *read: /*
+ContUser-Agent: curl/8.12.1
+Accept: */*
+read: ent-Typeread: : applicread: ation/jsread: on
+Contread: ent-Lengread: th: 22
+Content-Type: application/json
+Content-Length: 22
+read: 
+{"flavread: or":"darread: k mode"}
+Error: EOF
+{"flavor":"dark mode"}
+Connection to  [::1]:51162 closed
