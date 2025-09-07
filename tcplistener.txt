@@ -1,3 +1,10 @@
-Accepted connection from 127.0.0.1:40742
-Do you have what it takes to be an engineer at TheStartup™?
-Connection to  127.0.0.1:40742 closed
+Accepted connection from [::1]:45368
+Request Line:
+- Method: GET
+- Target: /use-neovim-btw
+- Version: 1.1
+Headers:
+- host: localhost:42069
+- user-agent: curl/8.12.1
+- accept: */*
+Connection to  [::1]:45368 closed
