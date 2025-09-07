@@ -2,45 +2,10 @@ package main
 
 import (
 	"fmt"
-	"io"
+	"httpfromtcp/internal/requests"
 	"log"
 	"net"
-	"strings"
 )
-
-func getLinesChannel(f io.ReadCloser) <-chan string {
-	lineChan := make(chan string)
-	go func() {
-		defer f.Close()
-		defer close(lineChan)
-		buffer := make([]byte, 8)
-		var lineBegin string = ""
-		for {
-			n, err := f.Read(buffer)
-			if err != nil {
-				fmt.Println("Error:", err)
-				if lineBegin != "" {
-					lineChan <- lineBegin
-					lineBegin = ""
-				}
-				if err == io.EOF {
-					break
-				}
-				break
-			}
-			str := string(buffer[:n])
-			parts := strings.Split(str, "\n")
-
-			for i := range len(parts) - 1 {
-				lineChan <- lineBegin + parts[i]
-				lineBegin = ""
-			}
-			lineBegin += parts[len(parts)-1]
-		}
-	}()
-
-	return lineChan
-}
 
 const port = ":42069"
 
@@ -57,12 +22,15 @@ func main() {
 			log.Fatalf("error: %s\n", err.Error())
 		}
 		fmt.Println("Accepted connection from", conn.RemoteAddr())
-
-		linesChan := getLinesChannel(conn)
-
-		for line := range linesChan {
-			fmt.Println(line)
+		req, err := requests.RequestFromReader(conn)
+		if err != nil {
+			log.Fatalf("Error parsing request: %s\n", err.Error())
 		}
+		fmt.Println("Request Line:")
+		fmt.Printf("- Method: %s\n", req.RequestLine.Method)
+		fmt.Printf("- Target: %s\n", req.RequestLine.RequestTarget)
+		fmt.Printf("- Version: %s\n", req.RequestLine.HttpVersion)
+
 		fmt.Println("Connection to ", conn.RemoteAddr(), "closed")
 	}
 
