@@ -6,6 +6,7 @@ import (
 	"httpfromtcp/internal/headers"
 	"io"
 	"regexp"
+	"strconv"
 	"strings"
 )
 
@@ -17,12 +18,14 @@ type requestParsingState int
 const (
 	initialized requestParsingState = iota
 	parsingHeader
+	parsingBody
 	done
 )
 
 type Request struct {
 	RequestLine         RequestLine
 	Headers             headers.Headers
+	Body                []byte
 	requestParsingState requestParsingState
 }
 
@@ -137,10 +140,31 @@ func (r *Request) singleParse(data []byte) (int, error) {
 			return 0, err
 		}
 		if finished {
-			r.requestParsingState = done
+			r.requestParsingState = parsingBody
 			return n, nil
 		}
 		return n, nil
+
+	case parsingBody:
+		contentLengthString, ok := r.Headers.Get("Content-Length")
+		if !ok {
+			r.requestParsingState = done
+			return len(data), nil
+		}
+		contentLength, err := strconv.Atoi(contentLengthString)
+		if err != nil {
+			return 0, err
+		}
+		r.Body = append(r.Body, data...)
+
+		if len(r.Body) > contentLength {
+			return 0, errors.New("body bigger than Content-Length")
+		}
+
+		if len(r.Body) == contentLength {
+			r.requestParsingState = done
+		}
+		return len(data), nil
 
 	case done:
 		return 0, errors.New("Error: Trying to read data in a done state")
