@@ -95,3 +95,13 @@ func headerFromString(s string) (string, string, error) {
 	headerValue := strings.ReplaceAll(headerValueText, " ", "")
 	return headerName, headerValue, nil
 }
+
+func (h Headers) Override(key, value string) {
+	key = strings.ToLower(key)
+	h[key] = value
+}
+
+func (h Headers) Remove(key string) {
+	key = strings.ToLower(key)
+	delete(h, key)
+}
