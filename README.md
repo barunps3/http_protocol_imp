@@ -46,3 +46,7 @@ Transfer-Encoding: chunked
 \r\n
 ```
 
+### Video Content Type
+Save a video file in folder `assets/`
+And in your browser type enter the address `http://localhost:42069/video`
+As of now, it can handle small video files only!!
