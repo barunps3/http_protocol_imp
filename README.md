@@ -7,7 +7,8 @@ This Webserver, can do the following:
 - Currently on Responds to `GET` Requests, however can be extended to handle other `HTTP Methods`
 - Response body follows the same [RFC 9112 Message Format](https://datatracker.ietf.org/doc/html/rfc9112#name-message-format) 
 - Response Headers always include `Content-Length` (unless  Chunked-Encoding) and `Connection: Close` header for `curl` to close the connection safely
-- Capable of sending response body in chunked encoding format as well
+- Included test cases to check parsing of request and response based on message format
+- Capable of sending response body in `Chunked-Encoding` format as well
 - Server shutsdown with interrupt (Ctrl + C)`SIGINT`
 
 ## How to execute
